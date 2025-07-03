@@ -3,6 +3,9 @@ import { Hono } from 'hono'
 import type { AppType } from '../../user-service/src/index.ts'
 import { hc } from 'hono/client'
 import { notificationRoutes } from './controllers/notification.controller.js'
+import dotenv from 'dotenv'
+dotenv.config()
+
 const app = new Hono().route('/api/v1/notification', notificationRoutes)
 
 //RPC -> Implemented

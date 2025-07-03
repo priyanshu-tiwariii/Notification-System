@@ -1,14 +1,12 @@
 import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
-import { Resend } from "resend";
 import { sendMail } from "../util/sendMail.js";
-const resend = new Resend(process.env.RESEND_API_KEY);
 const app = new Hono()
-.post("/register/send-notification",
+.post("/send-otp",
     zValidator("json",
         z.object({
-            email: z.string().email("Invalid email address"),
+            email : z.string().email("Invalid email address"),
         })
     ),
     async(c)=>{
@@ -17,9 +15,8 @@ const app = new Hono()
             console.log("Sending notification to:", email);
             const res = await sendMail(
                 email,
-                email,
-                "Welcome to Our Service",
-                "Thank you for registering with us! Your OTP is 123456. Please use this to complete your registration.",
+                "Welcome to our service!",
+                "Your OTP is 123456. Please use this to complete your registration."
             )
             if (!res) {
                 return c.json({
