@@ -1,6 +1,12 @@
 import { Resend } from "resend";
+import dotenv from 'dotenv'
+dotenv.config();
+const API_KEY = process.env.RESEND_API_KEY || "your-";
+if(!API_KEY) {
+    throw new Error("RESEND_API_KEY is not set in environment variables");
+}
 
-const resend = new Resend(process.env.RESEND_API_KEY || 're_hFd3b9AL_G4e2Hs7wKGZDcyY3D1YJ3YTx');
+const resend = new Resend(API_KEY);
 
 
 export const sendMail = async (
@@ -17,8 +23,6 @@ export const sendMail = async (
                  subject: subject || 'Default Subject',
                  text: text || 'Default message content',
              })
-
-             console.log("API KEY :", process.env.RESEND_API_KEY);
         if (error) {
             console.error("Error sending email:", error);
             throw new Error("Failed to send email");

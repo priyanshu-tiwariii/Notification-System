@@ -4,6 +4,14 @@ import type { AppType } from '../../user-service/src/index.ts'
 import { hc } from 'hono/client'
 import { notificationRoutes } from './controllers/notification.controller.js'
 import dotenv from 'dotenv'
+import { Worker, Job } from 'bullmq'
+import { sendMail } from './util/sendMail.js'
+import { Redis } from 'ioredis'
+
+export const connection = new Redis({
+  maxRetriesPerRequest: null,
+})
+
 dotenv.config()
 
 const app = new Hono().route('/api/v1/notification', notificationRoutes)
@@ -12,7 +20,21 @@ const app = new Hono().route('/api/v1/notification', notificationRoutes)
 const client = hc<AppType>('http://localhost:3002/')
 
 
-
+const worker = new Worker("notification-queue", async (job: Job) => {
+  console.log("Processing job:", job.id, "with data:", job.data);
+  console.log("Job name:", job.name);
+  if(job.name === "email-queue") {
+    await sendMail(
+      job.data.to,
+      job.data.subject,
+      job.data.text
+    )
+  }
+},{
+  connection,
+  autorun: true, // autoturn means worker will start processing jobs automatically
+  concurrency: 5 //Cocncurrency mean how many jobs can be processed at the same time
+});
 
 
 // app.get('/', async (c) => {
