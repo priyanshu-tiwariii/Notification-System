@@ -171,7 +171,6 @@ All inter-service communication is done using **HTTP fetch** calls, mimicking a 
 
 For any questions, improvements, or contributions, feel free to reach out:
 
-* **Name**: *Your Full Name*
 * **LinkedIn**: [linkedin.com/in/priyanshu-tiwarii](https://www.linkedin.com/in/priyanshu-tiwarii/)
 * **Email**: *[priyanshu-tiwari@hotmail.com](mailto:priyanshu-tiwari@hotmail.com)
 
